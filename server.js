@@ -3,6 +3,14 @@ const crypto = require('crypto');
 
 const app = express();
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Signature');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+
 // Wir brauchen den RAW body für HMAC -> express.raw
 app.use('/mc-pay', express.raw({ type: 'application/json' }));
 
