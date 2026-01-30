@@ -72,10 +72,11 @@ app.post('/mc-pay', (req, res) => {
 });
 
 // GET /payments?limit=50
-app.get('/payments', (req, res) => {
+app.get('/mc-pay', (req, res) => {
   const limit = Math.max(1, Math.min(200, Number(req.query.limit || 50)));
   res.json({ ok: true, payments: payments.slice(0, limit) });
 });
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log('Listening on', port));
