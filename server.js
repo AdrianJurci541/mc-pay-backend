@@ -71,11 +71,18 @@ app.post('/mc-pay', (req, res) => {
   }
 });
 
-// GET /payments?limit=50
-app.get('/mc-pay', (req, res) => {
-  const limit = Math.max(1, Math.min(200, Number(req.query.limit || 50)));
-  res.json({ ok: true, payments: payments.slice(0, limit) });
+// GET /balance?user=Steve
+app.get('/balance', (req, res) => {
+  const user = String(req.query.user || '').trim();
+  if (!user) return res.status(400).json({ ok: false, error: 'Missing user' });
+
+  const balance = payments
+    .filter(p => (p.payer || '').toLowerCase() === user.toLowerCase())
+    .reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+  res.json({ ok: true, user, balance });
 });
+
 
 
 const port = process.env.PORT || 3000;
